@@ -1,26 +1,29 @@
 {
-  "name": "electron-quick-start",
-  "version": "1.0.0",
-  "description": "A minimal Electron application",
-  "main": "main.js",
-  "scripts": {
-    "start": "electron .",
-    "dev": "electron . --debug"
-  },
-  "repository": "https://github.com/electron/electron-quick-start",
-  "keywords": [
-    "Electron",
-    "quick",
-    "start",
-    "tutorial",
-    "demo"
-  ],
-  "author": "GitHub",
-  "license": "CC0-1.0",
-  "devDependencies": {
-    "electron": "^2.0.0"
-  },
-  "dependencies": {
-    "axios": "^0.18.0"
-  }
+    "name": "Gold",
+    "version": "1.0.0",
+    "description": "watch the price of gold in g-banker app",
+    "main": "main.js",
+    "scripts": {
+        "start": "electron .",
+        "dev": "electron . --debug",
+        "package:mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --out=out --icon=logo.icns",
+        "package:win": "﻿electron-packager . --overwrite --platform=win32 --arch=ia32 --out=out --icon=logo.ico"
+    },
+    "repository": "https://github.com/zy108830/gold",
+    "keywords": [
+        "Electron",
+        "quick",
+        "start",
+        "tutorial",
+        "demo",
+        "gold"
+    ],
+    "author": "siguoya",
+    "license": "CC0-1.0",
+    "devDependencies": {
+        "electron": "^2.0.0"
+    },
+    "dependencies": {
+        "axios": "^0.18.0"
+    }
 }
