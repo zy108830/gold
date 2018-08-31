@@ -4,7 +4,8 @@
   "description": "A minimal Electron application",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "dev": "electron . --debug"
   },
   "repository": "https://github.com/electron/electron-quick-start",
   "keywords": [
@@ -18,5 +19,8 @@
   "license": "CC0-1.0",
   "devDependencies": {
     "electron": "^2.0.0"
+  },
+  "dependencies": {
+    "axios": "^0.18.0"
   }
 }
