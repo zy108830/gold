@@ -1,10 +1,13 @@
 const {ipcMain, app, Menu, BrowserWindow, Tray} = require('electron')
 const path = require('path')
 const axios = require('axios')
+const moment=require('moment')
 let mainWindow
 let appIcon = null
 //不在dock上显示icon
-app.dock.hide();
+if (process.platform == 'darwin') {
+	app.dock.hide();
+}
 ipcMain.on('put-in-tray', (event) => {
 	//初始化appIcon
 	const iconPath = path.join(__dirname, 'logo.jpg')
@@ -36,14 +39,6 @@ ipcMain.on('remove-tray', () => {
 	app.quit()
 })
 
-function ready() {
-	mainWindow = new BrowserWindow({width: 800, height: 600, show: false})
-	mainWindow.loadFile('index.html')
-	mainWindow.on('closed', function () {
-		mainWindow = null
-	})
-}
-
 app.on('ready', ready)
 app.on('window-all-closed', function () {
 	if (process.platform !== 'darwin') {
@@ -53,3 +48,18 @@ app.on('window-all-closed', function () {
 		appIcon.destroy()
 	}
 })
+
+function ready() {
+	mainWindow = new BrowserWindow({width: 800, height: 600, show: false})
+	mainWindow.loadFile('index.html')
+	mainWindow.on('closed', function () {
+		mainWindow = null
+	})
+}
+
+function updateGoldPrice() {
+	var date=new moment();
+	var dayOfWeek=date.day()
+	var hourOfDay=date.hour()
+	var minuteOfHour=date.minute()
+}
