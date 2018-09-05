@@ -3,6 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <title>黄金钱包</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="./assets/css/normalize.css">
+    <style type="text/css">
+        #main {
+            display: flex;
+        }
+        #loading{
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            z-index: 10;
+        }
+        .loading-container{
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%,-50%);
+            text-align: center;
+        }
+        .loading-intro{
+            color: #FFC100;
+        }
+        #tendency{
+            flex: 1 0 auto;
+            width: 500px;
+            height: 300px;
+        }
+        #tendency-charts{
+            width: 500px;
+            height: 300px;
+        }
+        #intro{
+            flex: 1 0 auto;
+            width: 300px;
+            height: 300px;
+            padding-top: 40px;
+            padding-left: 80px;
+            box-sizing: border-box;
+        }
+        #intro .price-value{
+            color: #FF9502;
+            font-weight: bold;
+        }
+        #intro ul{
+            list-style: none;
+            padding: 0;
+        }
+        #intro ul li {
+            height: 30px;
+        }
+    </style>
+    <script type="text/javascript" src="./assets/js/echarts.simple.min.js"></script>
     <script type="text/javascript">
 		var _hmt = _hmt || [];
 		(function () {
@@ -14,10 +70,120 @@
     </script>
 </head>
 <body>
+<div id="loading">
+    <div class="loading-container">
+        <img src="./assets/images/loading.gif" alt="">
+        <p class="loading-intro">数据正在加载中</p>
+    </div>
+</div>
+<div id="main">
+    <div id="tendency">
+        <div id="tendency-charts">
+
+        </div>
+    </div>
+    <div id="intro">
+        <p>自程序启动到现在</p>
+        <ul>
+            <li>最高：<span class="price-value" id="priceMax"></span></li>
+            <li>最低：<span class="price-value" id="priceMin"></span></li>
+        </ul>
+    </div>
+</div>
 <script>
 	require('./renderer.js')
 	const os = require('os')
 	const ipc = require('electron').ipcRenderer
+    let priceMaxDom=document.getElementById('priceMax');
+    let priceMinDom=document.getElementById('priceMin');
+	let myChart = echarts.init(document.getElementById('tendency-charts'))
+    let loadingComplete=false;
+
+	setInterval(function () {
+		ipc.send('get-query-result-list')
+	}, 3000);
+
+	ipc.on('return-query-result-list', (event, arg) => {
+		let date_list = [], price_list = [];
+		for (let i = 0; i < arg.length; i++) {
+			let date = new Date(arg[i]['time']), hour = date.getHours(), minute = date.getMinutes();
+			date_list.push(formatTime(hour) + ':' + formatTime(minute))
+			price_list.push(arg[i]['price'])
+		}
+		let option = getChartOption(date_list, price_list);
+		myChart.setOption(option);
+		if(!loadingComplete){
+			document.getElementById('loading').style.display='none';
+		    loadingComplete=true;
+        }
+	})
+
+	function formatTime(time) {
+		return time < 10 ? ('0' + time) : time;
+	}
+
+	function getChartOption(date_list, price_list) {
+		let origin_min_price=Math.min.apply(this, price_list);
+		let origin_max_price=Math.max.apply(this, price_list);
+		let min_price = Math.floor(origin_min_price);
+		let max_price = Math.ceil(origin_max_price);
+		priceMaxDom.innerText=origin_max_price.toString();
+		priceMinDom.innerText=origin_min_price.toString();
+		return {
+			title: {
+				text: '黄金钱包APP'
+			},
+			tooltip: {
+				trigger: 'axis',
+				axisPointer: {
+					type: 'cross',
+					label: {
+						backgroundColor: '#FF9502'
+					}
+				}
+			},
+			legend: {
+				data: ['黄金行情趋势']
+			},
+			grid: {
+				containLabel: true
+			},
+			xAxis: [
+				{
+					type: 'category',
+					boundaryGap: false,
+					data: date_list
+				}
+			],
+			yAxis: [
+				{
+					min: min_price,
+					max: max_price,
+					type: 'value'
+				}
+			],
+			series: [
+				{
+					name: '黄金行情趋势',
+					type: 'line',
+					stack: '总量',
+                    line:{
+	                    areaStyle:{
+                            color:'#FF9502'
+                        }
+                    },
+					itemStyle:{
+						color:'#FFC100'
+					},
+					lineStyle:{
+						color:'#FFC100'
+					},
+					data: price_list
+				}
+			]
+		};
+	}
+
 	_hmt.push(['_trackEvent', '黄金钱包', '启动', '系统版本', os.type() + ' ' + os.release()]);
 </script>
 </body>

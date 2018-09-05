@@ -9,6 +9,8 @@ let mainWindow = null//浏览器窗口
 let appIcon = null//系统托盘
 let should_query = true;//是否有必要查询，例如非交易日只查询一次就行了
 let contextMenu = null;
+let query_result_list = [];
+let quit_app=false;
 //不在dock上显示icon
 app.dock.hide();
 
@@ -18,7 +20,7 @@ function initTray() {
 	appIcon.setToolTip('软银投资的黄金特色理财平台')
 	appIcon.setTitle('查询中...')
 	appIcon.on('click', (event) => {
-		// initWindow();
+		initWindow();
 	});
 	appIcon.on('right-click', (event) => {
 		if (!contextMenu) {
@@ -26,6 +28,7 @@ function initTray() {
 				{
 					label: '退出',
 					click: () => {
+						quit_app=true
 						app.quit();
 					}
 				}
@@ -38,11 +41,20 @@ function initTray() {
 
 function initWindow() {
 	if (!mainWindow) {
-		mainWindow = new BrowserWindow({width: 800, height: 600, title: '黄金钱包'})
+		mainWindow = new BrowserWindow({title: '黄金钱包', width: 800, height: 300, resizable: true,useContentSize:true})
+		mainWindow.loadFile('index.html')
+	}else {
+		mainWindow.show()
 	}
-	mainWindow.loadFile('index.html')
 	mainWindow.on('closed', () => {
 		mainWindow = null;
+	})
+	mainWindow.on('close', (event) => {
+		if(!quit_app){
+			mainWindow.hide();
+			event.preventDefault();
+			return false;
+		}
 	})
 }
 
@@ -54,6 +66,10 @@ function updateGoldPrice() {
 			let price = response['data']['data']['realtime_price']
 			price = (price / 100).toFixed(2).toString();
 			appIcon.setTitle(price)
+			query_result_list.push({
+				'time': (new Date()).getTime(),
+				'price': parseFloat(price)
+			})
 		}).catch((error) => {
 			console.log(error)
 		})
@@ -93,8 +109,10 @@ function shouldQuery() {
 app.on('ready', () => {
 	initTray();
 })
-
 //阻止事件默认行为，避免直接退出托盘
 app.on('window-all-closed', () => {
 	return false;
+})
+ipcMain.on('get-query-result-list', (event) => {
+	event.sender.send('return-query-result-list', query_result_list)
 })
