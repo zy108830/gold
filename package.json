@@ -6,8 +6,7 @@
     "scripts": {
         "start": "electron .",
         "dev": "electron . --debug",
-        "package:mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --out=out --icon=logo.icns",
-        "package:win": "﻿electron-packager . --overwrite --platform=win32 --arch=ia32 --out=out --icon=logo.ico"
+        "package": "electron-packager . --overwrite --platform=darwin --arch=x64 --out=out --icon=logo.icns"
     },
     "repository": "https://github.com/zy108830/gold",
     "keywords": [

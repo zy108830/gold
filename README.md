@@ -8,5 +8,6 @@
 ### 下载安装
 >目前仅支持mac系统，晚点时间才会支持windows系统
 
-Mac版下载：https://github.com/zy108830/gold/releases/download/1.0/Gold.zip
+Mac版下载地址：https://github.com/zy108830/gold-for-mac/releases
 
+点击下载页面中的`Gold.zip`，解压之后即可使用
