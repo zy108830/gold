@@ -47,7 +47,7 @@ function initWindow() {
 			title: '黄金钱包',
 			width: 800,
 			height: 300,
-			resizable: true,
+			resizable: false,
 			useContentSize: true,
 			autoHideMenuBar:true
 		})

@@ -6,6 +6,7 @@
     "scripts": {
         "start": "electron .",
         "dev": "electron . --debug",
+        "package":"﻿npm-run-all package:*",
         "package:mac": "electron-packager . Gold-For-Mac --overwrite --platform=darwin --arch=x64 --out=out --icon=logo.icns",
         "package:win": "﻿electron-packager . Gold-For-Win --overwrite --platform=win32 --arch=ia32 --out=out --icon=logo.ico"
     },
