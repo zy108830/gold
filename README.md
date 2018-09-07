@@ -14,7 +14,7 @@
 
 ### 下载安装
 
-下载地址：https://github.com/zy108830/gold-for-mac/releases
+下载地址：https://github.com/zy108830/gold/releases
 - Windows系统下载`Gold-For-Win.zip`,解压之后点击Gold-For-Mac，即可使用
 - Mac系统下载`Gold-For-Mac.zip`，解压之后点击Gold-For-Win.exe，即可使用
 
