@@ -16,7 +16,7 @@
 
 下载地址：https://github.com/zy108830/gold-for-mac/releases
 - Windows系统下载`Gold-For-Win.zip`,解压之后点击Gold-For-Mac，即可使用
-- Mac系统下载`Gold-For-Mac.zip`，解压之后点击Gold-For-Win.exr，即可使用
+- Mac系统下载`Gold-For-Mac.zip`，解压之后点击Gold-For-Win.exe，即可使用
 
 ### 注意事项
 - 如果数据与黄金钱包APP里面的数据不一致，一切以黄金钱包APP里面展示的行情数据为准
