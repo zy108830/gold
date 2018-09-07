@@ -10,9 +10,11 @@ let appIcon = null//系统托盘
 let should_query = true;//是否有必要查询，例如非交易日只查询一次就行了
 let contextMenu = null;
 let query_result_list = [];
-let quit_app=false;
+let quit_app = false;
 //不在dock上显示icon
-app.dock.hide();
+if (process.platform == 'darwin') {
+	app.dock.hide();
+}
 
 function initTray() {
 	const iconPath = path.join(__dirname, 'logo.jpg')
@@ -28,7 +30,7 @@ function initTray() {
 				{
 					label: '退出',
 					click: () => {
-						quit_app=true
+						quit_app = true
 						app.quit();
 					}
 				}
@@ -41,16 +43,23 @@ function initTray() {
 
 function initWindow() {
 	if (!mainWindow) {
-		mainWindow = new BrowserWindow({title: '黄金钱包', width: 800, height: 300, resizable: true,useContentSize:true})
+		mainWindow = new BrowserWindow({
+			title: '黄金钱包',
+			width: 800,
+			height: 300,
+			resizable: true,
+			useContentSize: true,
+			autoHideMenuBar:true
+		})
 		mainWindow.loadFile('index.html')
-	}else {
+	} else {
 		mainWindow.show()
 	}
 	mainWindow.on('closed', () => {
 		mainWindow = null;
 	})
 	mainWindow.on('close', (event) => {
-		if(!quit_app){
+		if (!quit_app) {
 			mainWindow.hide();
 			event.preventDefault();
 			return false;
